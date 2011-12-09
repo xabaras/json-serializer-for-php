@@ -33,7 +33,7 @@ class JSONSerializer {
 	 * @param object $ObjectInstance
 	 * @return a string containing the JSON representation of the input object 
 	 */
-	public function serialize($ObjectInstance) {
+	public static function serialize($ObjectInstance) {
 		return json_encode($ObjectInstance);
 	}
 
@@ -45,7 +45,7 @@ class JSONSerializer {
 	 * @param String $className The class name of the object to be deserialized
 	 * @return an object instance of type $className
 	 */
-	public function deserialize($json, $className) {
+	public static function deserialize($json, $className) {
 		$result=null;
 		$counter=0;
 		$decoded = json_decode($json);
