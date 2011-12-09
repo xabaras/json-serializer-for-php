@@ -26,12 +26,25 @@
  */
 
 class JSONSerializer {
-
+	
+	/**
+	 * 
+	 * Takes a PHP object and returns a string containing its JSON representation 
+	 * @param object $ObjectInstance
+	 * @return a string containing the JSON representation of the input object 
+	 */
 	public function serialize($ObjectInstance) {
 		return json_encode($ObjectInstance);
 	}
 
 
+	/**
+	 * 
+	 * Takes a JSON string and a class name and returns a PHP object
+	 * @param string $json JSON representation of an object / object array
+	 * @param String $className The class name of the object to be deserialized
+	 * @return an object instance of type $className
+	 */
 	public function deserialize($json, $className) {
 		$result=null;
 		$counter=0;
