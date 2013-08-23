@@ -18,7 +18,7 @@
  */
 
 /**
- * JSON Serializer 1.1 (23/08/2013)
+ * JSON Serializer 1.1
  * 
  * The class implements methods to simply serialize/deserialize a PHP object/array from/to JSON
  *
@@ -79,9 +79,8 @@ class JSONSerializer {
 			}
 			
 			if (count($decoded) ==1 ) {
-				if ( gettype($decoded) == "array" ) {
-					$temp[0] = $ins;	
-					$ins = $temp;
+				if ( gettype(json_decode($json)) == "array" ) {
+					$ins = array($ins);
 				}
 				return $ins;
 			}
