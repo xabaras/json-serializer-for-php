@@ -18,7 +18,8 @@
  */
 
 /**
- *
+ * JSON Serializer 1.1 (23/08/2013)
+ * 
  * The class implements methods to simply serialize/deserialize a PHP object/array from/to JSON
  *
  * @author Paolo Montalto <webmaster[at]xabaras.it>
@@ -45,7 +46,7 @@ class JSONSerializer {
 	 * @param String $className The class name of the object to be deserialized
 	 * @return an object instance of type $className
 	 */
-	public static function deserialize($json, $className) {
+	public static function deserialize($json, $className = NULL) {
 		$result=null;
 		$counter=0;
 		$decoded = json_decode($json);
@@ -55,24 +56,33 @@ class JSONSerializer {
 		}
 		
 		foreach ($decoded as $member) {
-			$instance = new ReflectionClass($className);
-			$ins=$instance->newInstance();
-			
-			if ($member == "") {
-				return null;
+			if ( is_object($member) ) {
+				$instance = new ReflectionClass($className);
+				$ins=$instance->newInstance();
+					
+				if ($member == "") {
+					return null;
+				}
+					
+				foreach ($member as $key => $value) {
+					$prop = $instance->getProperty($key);
+					if (gettype($value) != "array") {
+						$prop->setValue($ins, $value);
+					}
+					else {
+						$memberClass = get_class($value[0]);
+						$prop->setValue($ins, $this->deserialize($value, $memberClass));
+					}
+				}	
+			} else {
+				$ins = $member;
 			}
 			
-			foreach ($member as $key => $value) {
-				$prop = $instance->getProperty($key);
-				if (gettype($value) != "array") {
-					$prop->setValue($ins, $value);
+			if (count($decoded) ==1 ) {
+				if ( gettype($decoded) == "array" ) {
+					$temp[0] = $ins;	
+					$ins = $temp;
 				}
-				else {
-					$memberClass = get_class($value[0]);
-					$prop->setValue($ins, $this->deserialize($value, $memberClass));
-				}
-			}
-			if (count($decoded)==1) {
 				return $ins;
 			}
 			else {
