@@ -18,7 +18,7 @@
  */
 
 /**
- * JSON Serializer 1.1
+ * JSON Serializer 1.1.2
  * 
  * The class implements methods to simply serialize/deserialize a PHP object/array from/to JSON
  *
@@ -66,19 +66,13 @@ class JSONSerializer {
 					
 				foreach ($member as $key => $value) {
 					$prop = $instance->getProperty($key);
-					if (gettype($value) != "array") {
-						$prop->setValue($ins, $value);
-					}
-					else {
-						$memberClass = get_class($value[0]);
-						$prop->setValue($ins, $this->deserialize($value, $memberClass));
-					}
+                    $prop->setValue($ins, $value);
 				}	
 			} else {
 				$ins = $member;
 			}
 			
-			if (count($decoded) ==1 ) {
+			if (count($decoded) == 1 ) {
 				if ( gettype(json_decode($json)) == "array" ) {
 					$ins = array($ins);
 				}
@@ -94,5 +88,3 @@ class JSONSerializer {
 		}
 	}
 }
-
-?>
